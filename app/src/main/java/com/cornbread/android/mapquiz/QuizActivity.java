@@ -1,7 +1,9 @@
 package com.cornbread.android.mapquiz;
 
+import android.nfc.Tag;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +13,9 @@ import android.widget.Toast;
 
 
 public class QuizActivity extends ActionBarActivity {
+    private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX= "index"; //Key for key-value pair for keeping a persistent index across orientations
+
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mPreviousButton;
@@ -53,7 +58,12 @@ public class QuizActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        mQuestionTextView = (TextView) findViewById(R.id.question_text_view); //Tie textview to layout widget
+
+        if(savedInstanceState != null){
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
+        }
+
         updateQuestion();
 
         mTrueButton = (Button) findViewById(R.id.true_button);
@@ -97,6 +107,13 @@ public class QuizActivity extends ActionBarActivity {
         });
     }
 
+    //This is called right before activity is stopped
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSaveInstanceState");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
