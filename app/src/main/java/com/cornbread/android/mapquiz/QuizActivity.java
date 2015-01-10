@@ -21,7 +21,9 @@ public class QuizActivity extends ActionBarActivity {
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(QuizActivity.this,R.string.correct_toast,Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuizActivity.this,
+                        R.string.correct_toast,
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -29,7 +31,9 @@ public class QuizActivity extends ActionBarActivity {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(QuizActivity.this,R.string.incorrect_toast,Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuizActivity.this,
+                        R.string.incorrect_toast,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
