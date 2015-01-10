@@ -31,6 +31,10 @@ public class QuizActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        int question = mQuestionBank[mCurrentIndex].getQuestion(); //This will give you the
+        mQuestionTextView.setText(question); //setText takes an INT and converts it to text
+
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
