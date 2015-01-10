@@ -13,8 +13,8 @@ import android.widget.Toast;
 public class QuizActivity extends ActionBarActivity {
     private Button mTrueButton;
     private Button mFalseButton;
-    private ImageButton mPreviousButton;
-    private ImageButton mNextButton;
+    private Button mPreviousButton;
+    private Button mNextButton;
     private TextView mQuestionTextView;
 
     //Set up array to hold TrueFalse objects. Constructor called multiple times.
@@ -72,7 +72,7 @@ public class QuizActivity extends ActionBarActivity {
             }
         });
 
-        mPreviousButton = (ImageButton)findViewById(R.id.previous_button);
+        mPreviousButton = (Button)findViewById(R.id.previous_button);
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +87,7 @@ public class QuizActivity extends ActionBarActivity {
             }
         });
 
-        mNextButton = (ImageButton)findViewById(R.id.next_button);
+        mNextButton = (Button)findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

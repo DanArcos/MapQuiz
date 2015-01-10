@@ -36,20 +36,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:src="@drawable/arrow_left"
+        <Button
             android:id="@+id/previous_button"
+            android:drawableLeft="@drawable/arrow_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:text="@string/previous_button"
             />
 
-        <ImageButton
-            android:src="@drawable/arrow_right"
+        <Button
+            android:drawableRight="@drawable/arrow_right"
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:text="@string/next_button"
             />
 
     </LinearLayout>
