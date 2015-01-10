@@ -18,6 +18,8 @@ public class QuizActivity extends ActionBarActivity {
     private Button mFalseButton;
     private Button mPreviousButton;
     private Button mNextButton;
+    private Button mCheatButton;
+
     private TextView mQuestionTextView;
 
     //Set up array to hold TrueFalse objects. Constructor called multiple times.
@@ -62,8 +64,6 @@ public class QuizActivity extends ActionBarActivity {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
         }
 
-        updateQuestion();
-
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +103,16 @@ public class QuizActivity extends ActionBarActivity {
                 updateQuestion();
             }
         });
+
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Start Cheat Activity
+            }
+        });
+
+        updateQuestion();
     }
 
     //This is called right before activity is stopped
