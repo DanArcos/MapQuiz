@@ -15,6 +15,7 @@ public class QuizActivity extends ActionBarActivity {
     private Button mNextButton;
     private TextView mQuestionTextView;
 
+    //Set up array to hold TrueFalse objects. Constructor called multiple times.
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
             new TrueFalse(R.string.question_oceans,true),
             new TrueFalse(R.string.question_mideast, false),
@@ -23,7 +24,7 @@ public class QuizActivity extends ActionBarActivity {
             new TrueFalse(R.string.question_asia, true),
     };
 
-    private int mCurrentIndex = 0; //Index of question in lit
+    private int mCurrentIndex = 0; //Index of questions to navigate mQuestionBank
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
