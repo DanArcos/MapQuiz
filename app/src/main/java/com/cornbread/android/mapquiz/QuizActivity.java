@@ -27,11 +27,11 @@ public class QuizActivity extends ActionBarActivity {
 
     //Set up array to hold TrueFalse objects. Constructor called multiple times.
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
-            new TrueFalse(R.string.question_oceans,true, false),
-            new TrueFalse(R.string.question_mideast, false, false),
-            new TrueFalse(R.string.question_africa, false, false),
-            new TrueFalse(R.string.question_americas, true, false),
-            new TrueFalse(R.string.question_asia, true, false),
+            new TrueFalse(R.string.question_oceans,true),
+            new TrueFalse(R.string.question_mideast, false),
+            new TrueFalse(R.string.question_africa, false),
+            new TrueFalse(R.string.question_americas, true),
+            new TrueFalse(R.string.question_asia, true),
     };
 
     private boolean[] mCheatArray = new boolean[mQuestionBank.length];
