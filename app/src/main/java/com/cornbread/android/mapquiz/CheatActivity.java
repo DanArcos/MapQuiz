@@ -15,7 +15,7 @@ public class CheatActivity extends ActionBarActivity {
     public static final String EXTRA_ANSWER_IS_TRUE = "com.cornbread.android.mapquiz.answer_is_true";
     public static final String EXTRA_ANSWER_SHOWN = "com.cornbread.android.mapquiz.answer_is_shown";
 
-    public static final String KEY_ANSWER_SHOWN = "shown";
+    public static final String KEY_ANSWER_SHOWN = "shown"; //Key to preserve across orientations
 
     private boolean mAnswerIsTrue;
     private boolean mAnswerShown;
@@ -24,9 +24,9 @@ public class CheatActivity extends ActionBarActivity {
     private Button mShowAnswer;
 
     private void setAnswerShownResult (boolean isAnswerShown){
-        Intent data = new Intent();
-        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
-        setResult(RESULT_OK, data);
+        Intent data = new Intent(); //Create new intent that will send data back
+        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown); //Populate intent with variable we want to send back
+        setResult(RESULT_OK, data); //Set result that will be sent back
         mAnswerShown = isAnswerShown;
     }
 
