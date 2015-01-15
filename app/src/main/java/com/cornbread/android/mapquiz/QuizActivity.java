@@ -1,5 +1,6 @@
 package com.cornbread.android.mapquiz;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 public class QuizActivity extends ActionBarActivity {
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX= "index"; //Key for key-value pair for keeping a persistent index across orientations
+    private static final String KEY_CHEATED = "cheated" ; //Key for key-value pair for keeping a cheated state across orientations
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -33,6 +35,8 @@ public class QuizActivity extends ActionBarActivity {
 
     private int mCurrentIndex = 0; //Index of questions to navigate mQuestionBank
 
+    private boolean mIsCheater;
+
     private void updateQuestion(){
         int question = mQuestionBank[mCurrentIndex].getQuestion();
         mQuestionTextView.setText(question); //setText takes an INT and converts it to text
@@ -43,11 +47,16 @@ public class QuizActivity extends ActionBarActivity {
 
         int messageResId = 0; //Initialize variable
 
-        if(userPressedTrue == answerIsTrue){
-            messageResId = R.string.correct_toast;
-        }
-        else{
-            messageResId = R.string.incorrect_toast;
+        if(mIsCheater){
+            messageResId = R.string.judgment_toast;
+        } else{
+
+            if(userPressedTrue == answerIsTrue){
+                messageResId = R.string.correct_toast;
+            }
+            else{
+                messageResId = R.string.incorrect_toast;
+            }
         }
 
         Toast.makeText(this,messageResId,Toast.LENGTH_SHORT).show();
@@ -62,6 +71,7 @@ public class QuizActivity extends ActionBarActivity {
 
         if(savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
+            mIsCheater = savedInstanceState.getBoolean(KEY_CHEATED);
         }
 
         mTrueButton = (Button) findViewById(R.id.true_button);
@@ -86,9 +96,11 @@ public class QuizActivity extends ActionBarActivity {
             public void onClick(View v) {
                 if(mCurrentIndex == 0){
                     mCurrentIndex = 4;
+                    mIsCheater = false;
                 }
                 else{
                     mCurrentIndex = (mCurrentIndex-1) % mQuestionBank.length;
+                    mIsCheater = false;
                 }
 
                 updateQuestion();
@@ -100,6 +112,7 @@ public class QuizActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;
+                mIsCheater = false;
                 updateQuestion();
             }
         });
@@ -109,10 +122,23 @@ public class QuizActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //Start Cheat Activity
+                Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
+                i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+                startActivityForResult(i, 0); //Zero parameter means we don't care what we send back
             }
         });
 
         updateQuestion();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null){
+            return;
+        }
+        mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
     }
 
     //This is called right before activity is stopped
@@ -120,7 +146,9 @@ public class QuizActivity extends ActionBarActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
+
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBoolean(KEY_CHEATED, mIsCheater);
     }
 
     @Override
