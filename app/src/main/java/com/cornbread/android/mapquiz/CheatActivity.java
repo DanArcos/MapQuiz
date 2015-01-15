@@ -3,6 +3,7 @@ package com.cornbread.android.mapquiz;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,8 @@ public class CheatActivity extends ActionBarActivity {
     public static final String EXTRA_ANSWER_IS_TRUE = "com.cornbread.android.mapquiz.answer_is_true";
     public static final String EXTRA_ANSWER_SHOWN = "com.cornbread.android.mapquiz.answer_is_shown";
 
+    public static final String KEY_ANSWER_SHOWN = "shown";
+
     private boolean mAnswerIsTrue;
     private boolean mAnswerShown;
 
@@ -24,6 +27,7 @@ public class CheatActivity extends ActionBarActivity {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
         setResult(RESULT_OK, data);
+        mAnswerShown = isAnswerShown;
     }
 
     @Override
@@ -33,6 +37,11 @@ public class CheatActivity extends ActionBarActivity {
 
         //Answer will not be shown until the user presses the button
         setAnswerShownResult(false);
+
+        if(savedInstanceState != null){
+            setAnswerShownResult(savedInstanceState.getBoolean(KEY_ANSWER_SHOWN));
+            //Log.i("TAG", Boolean.toString(mAnswerShown));
+        }
 
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
@@ -59,5 +68,11 @@ public class CheatActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_cheat, menu);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_ANSWER_SHOWN, mAnswerShown);
     }
 }
