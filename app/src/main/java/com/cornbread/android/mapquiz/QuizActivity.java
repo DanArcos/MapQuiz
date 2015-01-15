@@ -15,6 +15,7 @@ public class QuizActivity extends ActionBarActivity {
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX= "index"; //Key for key-value pair for keeping a persistent index across orientations
     private static final String KEY_CHEATED = "cheated" ; //Key for key-value pair for keeping a cheated state across orientations
+    private static final String KEY_CHEAT_ARRAY = "CheatArray";
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -26,12 +27,14 @@ public class QuizActivity extends ActionBarActivity {
 
     //Set up array to hold TrueFalse objects. Constructor called multiple times.
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
-            new TrueFalse(R.string.question_oceans,true),
-            new TrueFalse(R.string.question_mideast, false),
-            new TrueFalse(R.string.question_africa, false),
-            new TrueFalse(R.string.question_americas, true),
-            new TrueFalse(R.string.question_asia, true),
+            new TrueFalse(R.string.question_oceans,true, false),
+            new TrueFalse(R.string.question_mideast, false, false),
+            new TrueFalse(R.string.question_africa, false, false),
+            new TrueFalse(R.string.question_americas, true, false),
+            new TrueFalse(R.string.question_asia, true, false),
     };
+
+    private boolean[] mCheatArray = new boolean[mQuestionBank.length];
 
     private int mCurrentIndex = 0; //Index of questions to navigate mQuestionBank
 
@@ -47,7 +50,7 @@ public class QuizActivity extends ActionBarActivity {
 
         int messageResId = 0; //Initialize variable
 
-        if(mIsCheater){
+        if(mCheatArray[mCurrentIndex]){
             messageResId = R.string.judgment_toast;
         } else{
 
@@ -67,11 +70,14 @@ public class QuizActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        Log.i("OnCreate", Boolean.toString(mCheatArray[mCurrentIndex]));
+
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view); //Tie textview to layout widget
 
         if(savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
             mIsCheater = savedInstanceState.getBoolean(KEY_CHEATED);
+            mCheatArray = savedInstanceState.getBooleanArray(KEY_CHEAT_ARRAY);
         }
 
         mTrueButton = (Button) findViewById(R.id.true_button);
@@ -135,10 +141,22 @@ public class QuizActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data == null){
-            return;
+
+        //If CheatArray index is true do nothing, else go through the motions to pull the data
+
+        if(mCheatArray[mCurrentIndex]){
+            return; //Do Nothing
+        } else {
+            if (data == null){
+                return;
+            }
+            else{
+                mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false); //the false here is a default value
+                mCheatArray[mCurrentIndex] = mIsCheater;
+            }
         }
-        mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+
+        //Log.i("OnActivityResult", Boolean.toString(mCheatArray[mCurrentIndex]));
     }
 
     //This is called right before activity is stopped
@@ -149,6 +167,7 @@ public class QuizActivity extends ActionBarActivity {
 
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
         savedInstanceState.putBoolean(KEY_CHEATED, mIsCheater);
+        savedInstanceState.putBooleanArray(KEY_CHEAT_ARRAY, mCheatArray);
     }
 
     @Override
@@ -156,5 +175,11 @@ public class QuizActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_quiz, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("OnResume", Boolean.toString(mCheatArray[mCurrentIndex]));
     }
 }
